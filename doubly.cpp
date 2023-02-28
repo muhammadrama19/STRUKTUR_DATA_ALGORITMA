@@ -1,60 +1,119 @@
-#include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include "body.cpp"
 
 int main()
 {
+    int input = 0;
+    int tempDelOpt = 0;
+    int tempBetween = 0;
+    int tempVal = 0;
+    int opsiBetween = 0;
+    bool running = true;
 
-    printf("the original queue is:-\n");
+    List l;
+    l.front = NULL;
+    l.rear = NULL;
 
-    insert_rear(1);
+    insert_rear(&l, 1);
+    insert_front(&l, 2);
+    insert_rear(&l, 3);
 
-    insert_front(2);
+    printf("Kondisi awal node:-\n");
+    printqueue(l);
 
-    insert_rear(3);
-
-    printqueue(fronts, rear);
-
-    printf("Memasukkan 4 di depan\n");
-
-    insert_front(4);
-
-    printqueue(fronts, rear);
-    printf("Memasukkan 5 di belakang\n");
-
-    insert_rear(5);
-
-    printqueue(fronts, rear);
-    printf("Memasukkan 6 di depan\n");
-
-    insert_front(6);
-
-    printqueue(fronts, rear);
-
-    printf("Menghapus belakang\n");
-
-    delete_rear();
-
-    printqueue(fronts, rear);
-
-    printf("Masukan 8 di antara fronts dan selanjutnya\n");
-    insertBetween(fronts, 8);
-    printqueue(fronts, rear);
-
-    printf("Menghapus depan\n");
-
-    delete_front();
-
-    printqueue(fronts, rear);
-
-    printf("Mendapatkan elemen depan\n");
-
-    printf("%d\n", getfront());
-
-    printf("Mendapatkan elemen belakang\n");
-
-    printf("%d\n", getrear());
+    while (running)
+    {
+        printf("\n1.Insert\n2.Delete\n3.Lihat Front Rear\n4.Keluar\n");
+        printf("Masukan pilihan anda: ");
+        scanf("%d", &input);
+        switch (input)
+        {
+        case 1:
+            printf("\n1.Insert Depan.\n2.Insert Belakang\n ");
+            printf("\nMasukan pilihan anda: ");
+            scanf("%d", &opsiBetween);
+            switch (opsiBetween)
+            {
+            case 1:
+                printf("Masukkan angka untuk insert di depan: ");
+                scanf("%d", &input);
+                insert_front(&l, input);
+                printqueue(l);
+                break;
+            case 2:
+                printf("\nMasukkan angka untuk insert di belakang: ");
+                scanf("%d", &input);
+                insert_rear(&l, input);
+                printqueue(l);
+                break;
+            case 3:
+                printf("\nMasukkan angka untuk insert: ");
+                scanf("%d", &tempVal);
+                printf("Masukkan angka setelahnya: ");
+                scanf("%d", &tempBetween);
+                insertBetween(l, tempBetween, tempVal);
+                printqueue(l);
+                break;
+            default:
+                printf("Masukan pilihan yang benar.\n");
+                break;
+            }
+            break;
+        case 2:
+            {
+            printf("\n1.Delete Depan.\n2.Delete Belakang\n3");
+            printf("\nMasukan pilihan anda:");
+            scanf("%d", &tempDelOpt);
+            switch (tempDelOpt)
+            {
+            case 1:
+                {
+                delete_front(&l);
+                printf("Menghapus elemen depan\n");
+                printqueue(l);
+                break;
+                }
+            case 2:
+                {
+                delete_rear(&l);
+                printf("Menghapus elemen belakang\n");
+                printqueue(l);
+                break;
+                }
+            case 3:
+                {
+                printf("masukan key delete: ");
+                int keyDel = 0;
+                scanf("%d", &keyDel);
+                delete_by_key(&l, keyDel);
+                printqueue(l);
+                break;
+                }
+            default:
+                {
+                printf("Masukan pilihan yang benar.\n");
+                break;
+                }
+            }
+            }
+            break;
+        case 3:
+        {
+            printqueue(l);
+            printf("Front: %d, Rear: %d\n", getfront(l), getrear(l));
+            break;
+        }
+        case 4:
+        {
+            running = false;
+            break;
+        }
+        default:
+            printf("Masukan pilihan yang benar.\n");
+            break;
+        }
+    }
 
     return 0;
 }

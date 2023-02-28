@@ -1,144 +1,184 @@
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
 #include "header.h"
 
-using namespace std;
-
-bool isEmpty()
+bool isEmpty(List l)
 {
-    if (fronts == NULL && rear == NULL)
+    if (l.front == NULL && l.rear == NULL)
     {
         return true;
     }
     return false;
 }
 
-void insert_rear(int new_data)
+void insert_rear(List *l, int new_data)
 {
-    struct node *new_node = (struct node *)malloc(sizeof(struct node));
+
+    address new_node = (address)malloc(sizeof(nodes));
 
     new_node->data = new_data;
     new_node->prev = NULL;
     new_node->next = NULL;
 
-    if (isEmpty())
+    if (isEmpty(*l))
     {
-        fronts = new_node;
-        rear = new_node;
+        l->front = new_node;
+        l->rear = new_node;
     }
-
     else
     {
-        rear->next = new_node;
-        new_node->prev = rear;
-        rear = new_node;
+        (l->rear)->next = new_node;
+        new_node->prev = l->rear;
+        l->rear = new_node;
     }
 }
 
-void insert_front(int new_data)
+address search(List l, int key)
 {
-    struct node *new_node = (struct node *)malloc(sizeof(struct node));
+    address temp = l.front;
+    while (temp != NULL)
+    {
+        if (temp->data == key)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
 
+    return NULL;
+}
+
+void insert_front(List *l, int new_data)
+{
+    address new_node = (address)malloc(sizeof(nodes));
     new_node->data = new_data;
     new_node->next = NULL;
     new_node->prev = NULL;
 
-    if (isEmpty())
+    if (isEmpty(*l))
     {
-        fronts = new_node;
-        rear = new_node;
+        l->front = new_node;
+        l->rear = new_node;
     }
-
     else
     {
-        new_node->next = fronts;
-        fronts->prev = new_node->next;
-        fronts = new_node;
+        new_node->next = l->front;
+        (l->front)->prev = new_node;
+        l->front = new_node;
     }
 }
 
-void delete_front()
+void delete_front(List *l)
 {
-    if (isEmpty())
+    if (isEmpty(*l))
     {
-        printf("the queue is empty");
+        printf("Queue underflow.\n");
         return;
     }
 
-    struct node *temp = fronts;
+    address temp = l->front;
 
-    fronts = temp->next;
+    l->front = temp->next;
 
-    if (fronts == NULL)
+    if (l->front == NULL)
     {
-        rear = NULL;
+        l->rear = NULL;
     }
     else
     {
-        fronts->prev = NULL;
+        (l->front)->prev = NULL;
     }
 
-    delete (temp);
+    free(temp);
 }
 
-void delete_rear()
+void delete_rear(List *l)
 {
-    if (isEmpty())
+    if (isEmpty(*l))
     {
-        printf("the queue is empty");
+        printf("Queue underflow.\n");
         return;
     }
 
-    struct node *temp = rear;
-    rear = temp->prev;
-    if (rear == NULL)
+    address temp = l->rear;
+    l->rear = temp->prev;
+    if (l->rear == NULL)
     {
-        fronts = NULL;
+        l->front = NULL;
     }
     else
     {
-        rear->next = NULL;
+        (l->rear)->next = NULL;
     }
     temp->prev = NULL;
 
-    delete (temp);
+    free(temp);
 }
 
-int getfront()
+int getfront(List l)
 {
-    return fronts->data;
+    return (l.front)->data;
 }
 
-int getrear()
+int getrear(List l)
 {
-    return rear->data;
+    return (l.rear)->data;
 }
 
-void printqueue(struct node *fronts, struct node *rear)
+void printqueue(List l)
 {
-    while (fronts != rear)
+    address temp = l.front;
+
+    while (temp != NULL)
     {
-        printf("%d ", fronts->data);
-
-        fronts = fronts->next;
+        printf("%d ", temp->data);
+        temp = temp->next;
     }
 
-    printf("%d\n", rear->data);
+    printf("\n");
 }
-
-void insertBetween(struct node *prev_node, int new_data)
+void insertBetween(List &l, int prev_data, int new_data)
 {
+
+    address prev_node = search(l, prev_data);
     if (prev_node == NULL)
     {
-        printf("Previous node cannot be NULL\n");
+        printf("Data dengan %d tidak ada \n", prev_data);
         return;
     }
-    struct node *new_node = (struct node *)malloc(sizeof(struct node));
-    new_node->data = new_data;
-    new_node->next = prev_node->next;
-    new_node->prev = prev_node;
-    prev_node->next = new_node;
-    if (new_node->next != NULL)
-        new_node->next->prev = new_node;
+    else
+    {
+        address new_node = (address)malloc(sizeof(nodes));
+        new_node->data = new_data;
+        new_node->prev = prev_node;
+        new_node->next = prev_node->next;
+
+        if (prev_node->next != NULL)
+        {
+            prev_node->next->prev = new_node;
+        }
+
+        prev_node->next = new_node;
+    }
+}
+
+void delete_by_key(List *l, int key) {
+    address temp = search(*l, key);
+
+    if (temp == NULL) {
+        printf("Node tidak ada.\n");
+        return;
+    }
+
+    if (temp == l->front) {
+        delete_front(l);
+        return;
+    }
+
+    if (temp == l->rear) {
+        delete_rear(l);
+        return;
+    }
+
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    free(temp);
 }
