@@ -1,5 +1,10 @@
 #include "header.h"
 
+void createList(List *list){
+    (*list).front=NULL;
+    (*list).rear=NULL;
+}
+
 bool isEmpty(List l)
 {
     if (l.front == NULL && l.rear == NULL)
@@ -30,22 +35,6 @@ void insert_rear(List *l, int new_data)
         l->rear = new_node;
     }
 }
-
-address search(List l, int key)
-{
-    address temp = l.front;
-    while (temp != NULL)
-    {
-        if (temp->data == key)
-        {
-            return temp;
-        }
-        temp = temp->next;
-    }
-
-    return NULL;
-}
-
 void insert_front(List *l, int new_data)
 {
     address new_node = (address)malloc(sizeof(nodes));
@@ -124,53 +113,4 @@ void printqueue(List l)
     }
 
     printf("\n");
-}
-void insertBetween(List &l, int prev_data, int new_data)
-{
-
-    address prev_node = search(l, prev_data);
-    if (prev_node == NULL)
-    {
-        printf("Data dengan %d tidak ada \n", prev_data);
-        return;
-    }
-    else
-    {
-        address new_node = (address)malloc(sizeof(nodes));
-        new_node->data = new_data;
-        new_node->prev = prev_node;
-        new_node->next = prev_node->next;
-
-        if (prev_node->next != NULL)
-        {
-            prev_node->next->prev = new_node;
-        }
-
-        prev_node->next = new_node;
-    }
-}
-
-void delete_by_key(List *l, int key) {
-    address temp = search(*l, key);
-
-    if (temp == NULL) {
-        printf("Node tidak ada.\n");
-        return;
-    }
-
-    if (temp == l->front) {
-        delete_front(l);
-        return;
-    }
-
-    if (temp == l->rear) {
-        delete_rear(l);
-        return;
-    }
-
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
-    temp->next->next=NULL;
-    temp->next->prev=NULL;
-    free(temp);
 }

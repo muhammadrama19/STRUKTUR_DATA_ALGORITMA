@@ -17,7 +17,7 @@ typedef struct
        address rear;
 }List;
 
-address search(List l, int key);
+void createList(List *list);
 
 bool isEmpty();
 /*IS : Memeriksa apakah antrian kosong atau tidak. Jika fronts dan rear adalah NULL, maka antrian kosong*/
@@ -45,19 +45,9 @@ void delete_rear(List* l);
        Jika antrian tidak kosong, maka elemen kedua akan menjadi elemen terakhir antrian*/
 /*FS : Menghapus elemen terakhir pada linked list. Pointer rear akan menunjuk ke elemen sebelum elemen terakhir*/
 
-int getfront(List l);
-/*IS : Mengambil elemen pertama dari antrian
-       Jika antrian tidak kosong, maka elemen pertama akan dikembalikan*/
-/*FS : Menghasilkan nilai elemen pertama pada linked list*/
-
-int getrear(List l);
-/*IS : Mengambil elemen terakhir dari antriian
-       Jika antrian tidak kosong, maka elemen terakhir akan dikembalikan*/
-/*FS : Menghasilkan nilai elemen terakhir pada linked list*/
 
 void printqueue(List l);
 /*IS : Mencetak isi antrian dari depan ke belakang. Jika antrian tidak kosong, maka isi antrian akan dicetak*/
 /*FS : Menampilkan semua elemen pada linked list dari elemen pertama hingga elemen terakhir*/
 
-void insertBetween(List& l, int prev_data, int new_data);
 #endif
